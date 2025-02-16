@@ -1,4 +1,4 @@
-﻿using DataLayer.Models;
+﻿using EmployeeManager.API.Data.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace EmployeeManager.API.Contexts

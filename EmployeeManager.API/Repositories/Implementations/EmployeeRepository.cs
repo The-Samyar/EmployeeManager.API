@@ -1,5 +1,5 @@
-﻿using DataLayer.Models;
-using EmployeeManager.API.Contexts;
+﻿using EmployeeManager.API.Contexts;
+using EmployeeManager.API.Data.Models;
 using EmployeeManager.API.Repositories.Interfaces;
 
 namespace EmployeeManager.API.Repositories.Implementations

@@ -1,7 +1,7 @@
-﻿using DataLayer.Models;
+﻿using EmployeeManager.API.Data.Models;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace EmployeeManager.API.Data.DTOs
+namespace EmployeeManager.API.Data.Dtos
 {
     public class EmployeeDto
     {

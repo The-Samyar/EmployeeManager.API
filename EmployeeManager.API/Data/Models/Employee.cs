@@ -5,8 +5,9 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using EmployeeManager.API.Data.Models;
 
-namespace DataLayer.Models
+namespace EmployeeManager.API.Data.Models
 {
     public class Employee
     {

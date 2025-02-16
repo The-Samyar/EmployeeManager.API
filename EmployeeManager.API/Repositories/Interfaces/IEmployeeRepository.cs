@@ -1,4 +1,4 @@
-﻿using DataLayer.Models;
+﻿using EmployeeManager.API.Data.Models;
 
 namespace EmployeeManager.API.Repositories.Interfaces
 {

@@ -16,9 +16,9 @@ namespace EmployeeManager.API.Data.Models
         public double Rate { get; set; }
         public string? Message { get; set; }
 
-        [ForeignKey(nameof(Employee))]
-        public int EmployeeId { get; set; }
-        public Employee Employee { get; set; }
+        [ForeignKey(nameof(User))]
+        public int UserId { get; set; }
+        public User User { get; set; }
 
     }
 }

@@ -13,7 +13,7 @@ builder.Services.AddOpenApi();
 builder.Services.AddDbContext<EmployeeDbContext>(options =>
 options.UseSqlServer(builder.Configuration.GetConnectionString("MiladConnection")));
 
-builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 

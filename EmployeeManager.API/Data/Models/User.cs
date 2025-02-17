@@ -16,6 +16,10 @@ namespace EmployeeManager.API.Data.Models
         public string LastName { get; set; }
         public string Username { get; set; }
         public string Password { get; set; }
-        public bool IsAdmin { get; set; }
+        public bool IsAdmin { get; set; }=false;
+        public int PositionId { get; set; }
+        public Position Position { get; set; }
+
+        public ICollection<Reward> Rewards { get; set; }
     }
 }

@@ -21,6 +21,7 @@ namespace EmployeeManager.API.Controllers
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
         }
 
+        [HttpGet]
         public IActionResult GetAllPositions()
         {
             var res = _positionRepository.GetPositionsList();

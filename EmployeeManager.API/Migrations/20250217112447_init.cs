@@ -1,5 +1,4 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore.Migrations;
+﻿using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
@@ -37,36 +36,16 @@ namespace EmployeeManager.API.Migrations
                     LastName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Username = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Password = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    IsAdmin = table.Column<bool>(type: "bit", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Users", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Employees",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    HiringDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    UserId = table.Column<int>(type: "int", nullable: false),
+                    IsAdmin = table.Column<bool>(type: "bit", nullable: false),
                     PositionId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Employees", x => x.Id);
+                    table.PrimaryKey("PK_Users", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Employees_Positions_PositionId",
+                        name: "FK_Users_Positions_PositionId",
                         column: x => x.PositionId,
                         principalTable: "Positions",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Employees_Users_UserId",
-                        column: x => x.UserId,
-                        principalTable: "Users",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -80,15 +59,15 @@ namespace EmployeeManager.API.Migrations
                     Count = table.Column<int>(type: "int", nullable: false),
                     Rate = table.Column<double>(type: "float", nullable: false),
                     Message = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    EmployeeId = table.Column<int>(type: "int", nullable: false)
+                    UserId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Rewards", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Rewards_Employees_EmployeeId",
-                        column: x => x.EmployeeId,
-                        principalTable: "Employees",
+                        name: "FK_Rewards_Users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Users",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -107,52 +86,35 @@ namespace EmployeeManager.API.Migrations
 
             migrationBuilder.InsertData(
                 table: "Users",
-                columns: new[] { "Id", "FirstName", "IsAdmin", "LastName", "Password", "Username" },
+                columns: new[] { "Id", "FirstName", "IsAdmin", "LastName", "Password", "PositionId", "Username" },
                 values: new object[,]
                 {
-                    { 1, "Admin", true, "User", "adminpassword", "adminuser" },
-                    { 2, "John", false, "Doe", "password123", "johndoe" },
-                    { 3, "Jane", false, "Smith", "password456", "janesmith" },
-                    { 4, "Alice", false, "Johnson", "password789", "alicejohnson" },
-                    { 5, "Bob", false, "Brown", "password101", "bobbrown" }
-                });
-
-            migrationBuilder.InsertData(
-                table: "Employees",
-                columns: new[] { "Id", "HiringDate", "PositionId", "UserId" },
-                values: new object[,]
-                {
-                    { 1, new DateTime(2020, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified), 1, 2 },
-                    { 2, new DateTime(2021, 3, 20, 0, 0, 0, 0, DateTimeKind.Unspecified), 2, 3 },
-                    { 3, new DateTime(2022, 5, 10, 0, 0, 0, 0, DateTimeKind.Unspecified), 3, 4 },
-                    { 4, new DateTime(2023, 7, 25, 0, 0, 0, 0, DateTimeKind.Unspecified), 4, 5 },
-                    { 5, new DateTime(2021, 8, 30, 0, 0, 0, 0, DateTimeKind.Unspecified), 5, 1 }
+                    { 1, "Admin", true, "User", "admin", 5, "admin" },
+                    { 2, "John", false, "Doe", "password", 1, "johndoe" },
+                    { 3, "Jane", false, "Smith", "password", 2, "janesmith" },
+                    { 4, "Alice", false, "Johnson", "password", 3, "alicejohnson" },
+                    { 5, "Bob", false, "Brown", "password", 4, "bobbrown" }
                 });
 
             migrationBuilder.InsertData(
                 table: "Rewards",
-                columns: new[] { "Id", "Count", "EmployeeId", "Message", "Rate" },
+                columns: new[] { "Id", "Count", "Message", "Rate", "UserId" },
                 values: new object[,]
                 {
-                    { 1, 5, 2, "Excellent performance", 250.0 },
-                    { 2, 3, 3, "Great leadership", 210.0 },
-                    { 3, 4, 4, "Outstanding teamwork", 300.0 }
+                    { 1, 5, "Excellent performance", 250.0, 2 },
+                    { 2, 3, "Great leadership", 210.0, 3 },
+                    { 3, 4, "Outstanding teamwork", 300.0, 4 }
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Employees_PositionId",
-                table: "Employees",
-                column: "PositionId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Employees_UserId",
-                table: "Employees",
+                name: "IX_Rewards_UserId",
+                table: "Rewards",
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Rewards_EmployeeId",
-                table: "Rewards",
-                column: "EmployeeId");
+                name: "IX_Users_PositionId",
+                table: "Users",
+                column: "PositionId");
         }
 
         /// <inheritdoc />
@@ -162,13 +124,10 @@ namespace EmployeeManager.API.Migrations
                 name: "Rewards");
 
             migrationBuilder.DropTable(
-                name: "Employees");
+                name: "Users");
 
             migrationBuilder.DropTable(
                 name: "Positions");
-
-            migrationBuilder.DropTable(
-                name: "Users");
         }
     }
 }

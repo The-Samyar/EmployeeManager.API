@@ -5,8 +5,7 @@ namespace EmployeeManager.API.Repositories.Interfaces
 {
     public interface IUserRepository
     {
-        bool UserExists(string username);
-        bool UserCredentialsCheck(UserLoginDto loginUser);
+        bool UserExists(string username, string? password);
         User? GetUser(string username);
         ICollection<User> GetUsers();
         User CreateUser(User user);

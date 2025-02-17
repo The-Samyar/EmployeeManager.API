@@ -17,6 +17,7 @@ namespace EmployeeManager.API.Data.Models
         public string Username { get; set; }
         public string Password { get; set; }
         public bool IsAdmin { get; set; }=false;
+        [ForeignKey(nameof(Position))]
         public int PositionId { get; set; }
         public Position Position { get; set; }
 

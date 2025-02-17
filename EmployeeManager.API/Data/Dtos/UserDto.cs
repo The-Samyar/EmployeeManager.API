@@ -7,6 +7,6 @@ namespace EmployeeManager.API.Data.Dtos
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string Username { get; set; }
-        public int PositionId { get; set; }
+        public PositionDto PositionDto { get; set; }
     }
 }

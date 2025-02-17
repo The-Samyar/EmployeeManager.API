@@ -14,9 +14,14 @@ namespace EmployeeManager.API.Repositories.Implementations
         }
 
 
-        public bool UserExists(string username)
+        public bool UserExists(string username, string? password)
         {
-            return _context.Users.Any(u => u.Username == username);
+            if (password == null)
+            {
+                return _context.Users.Any(u => u.Username == username);
+            }
+            return _context.Users.Any(u => u.Username == username && u.Password == password);
+
         }
 
 

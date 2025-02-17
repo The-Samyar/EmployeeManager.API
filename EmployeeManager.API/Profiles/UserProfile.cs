@@ -11,6 +11,8 @@ namespace EmployeeManager.API.Profiles
             CreateMap<User, UserDto>();
             CreateMap<UserDto, User>();
             CreateMap<UserCreateDto, User>();
+            CreateMap<RewardDto, Reward>();
+            CreateMap<Reward, RewardDto>();
         }
     }
 }

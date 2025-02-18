@@ -7,6 +7,7 @@ using EmployeeManager.API.Data.Dtos;
 using EmployeeManager.API.Data.Models;
 using EmployeeManager.API.Repositories.Interfaces;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 
@@ -16,12 +17,12 @@ namespace EmployeeManager.API.Controllers
     [ApiController]
     public class AuthenticationController : ControllerBase
     {
-        private readonly IUserRepository _context;
+        private readonly IUserRepository _userRepository;
         private readonly IConfiguration _configuration;
 
         public AuthenticationController(IUserRepository context, IConfiguration configuration)
         {
-            _context = context ?? throw new ArgumentNullException(nameof(context));
+            _userRepository = context ?? throw new ArgumentNullException(nameof(context));
             _configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
         }
 
@@ -32,35 +33,39 @@ namespace EmployeeManager.API.Controllers
             {
                 return Unauthorized();
             }
-            var user = _context.GetUser(loginData.Username);
-            var securityKey = new SymmetricSecurityKey(
-                Encoding.ASCII.GetBytes(_configuration["Authentication:SecretForKey"])
+            var user = _userRepository.GetUser(loginData.Username);
+
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Authentication:SecretForKey"]));
+
+            var signingCredentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+
+         
+
+            var claims = new List<Claim>
+            {
+                         new Claim(ClaimTypes.NameIdentifier,user.Username.ToString()),
+                         new Claim(ClaimTypes.Role,user.FirstName.ToString() + user.LastName.ToString())
+                        };
+
+        
+
+            var token1 = new JwtSecurityToken(
+                         issuer: _configuration["Authentication:Issuer"],
+                         audience: _configuration["Authentication:Audience"],
+                         claims: claims,
+                         expires: DateTime.Now.AddDays(2),
+                         signingCredentials: signingCredentials
                 );
 
-            var signingCredentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
 
-            var tokenClaims = new List<Claim>();
-            tokenClaims.Add(new Claim("Id", user.Id.ToString()));
-            tokenClaims.Add(new Claim("Username", user.Username.ToString()));
-            tokenClaims.Add(new Claim("FullName", user.FirstName.ToString() + user.LastName.ToString()));
-
-            var tokenConfig = new JwtSecurityToken(
-                _configuration["Authentication:Issuer"],
-                _configuration["Authentication:Audience"],
-                tokenClaims,
-                DateTime.UtcNow,
-                DateTime.UtcNow.AddDays(1),
-                signingCredentials
-                );
-
-            var token = new JwtSecurityTokenHandler().WriteToken(tokenConfig);
+            var token = new JwtSecurityTokenHandler().WriteToken(token1);
 
             return Ok(token);
         }
 
         private bool IsValidUser(UserLoginDto loginData)
         {
-            return (_context.UserExists(loginData.Username, loginData.Password));
+            return (_userRepository.UserExists(loginData.Username, loginData.Password));
         }
 
     }

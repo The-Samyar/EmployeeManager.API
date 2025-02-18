@@ -11,7 +11,7 @@ namespace EmployeeManager.API.Controllers
 {
     [Route("api/positions")]
     [ApiController]
-    //[Authorize]
+    [Authorize]
     public class PositionController : ControllerBase
     {
         private readonly IPositionRepository _positionRepository;

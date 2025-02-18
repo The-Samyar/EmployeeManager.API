@@ -2,6 +2,7 @@
 using EmployeeManager.API.Data.Dtos;
 using EmployeeManager.API.Data.Models;
 using EmployeeManager.API.Repositories.Interfaces;
+using Microsoft.EntityFrameworkCore;
 
 namespace EmployeeManager.API.Repositories.Implementations
 {
@@ -13,15 +14,14 @@ namespace EmployeeManager.API.Repositories.Implementations
             _context = context ?? throw new ArgumentNullException(nameof(context));
         }
 
+        public bool UserExists(string username)
+        {
+            return _context.Users.Any(u => u.Username == username);
+        }
 
         public bool UserExists(string username, string? password)
         {
-            if (password == null)
-            {
-                return _context.Users.Any(u => u.Username == username);
-            }
             return _context.Users.Any(u => u.Username == username && u.Password == password);
-
         }
 
 
@@ -33,8 +33,9 @@ namespace EmployeeManager.API.Repositories.Implementations
 
         public User? GetUser(string username)
         {
-            return _context.Users.FirstOrDefault(u => u.Username == username);
+            return _context.Users.Include(x=>x.Position).FirstOrDefault(u => u.Username == username);
         }
+
 
         public User CreateUser(User user)
         {

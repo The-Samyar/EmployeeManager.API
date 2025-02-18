@@ -10,7 +10,7 @@ namespace EmployeeManager.API.Controllers
 {
     [Route("api/users/")]
     [ApiController]
-    //[Authorize]
+    [Authorize]
     public class UserController : ControllerBase
     {
         private readonly IMapper _mapper;

@@ -8,8 +8,10 @@ namespace EmployeeManager.API.Profiles
     {
         public UserProfile()
         {
-            CreateMap<User, UserDto>();
-            CreateMap<UserDto, User>();
+            CreateMap<User, UserDto>()
+              .ForMember(
+                    dest => dest.PositionDto,
+                    opt => opt.MapFrom(src => src.Position)).ReverseMap();
             CreateMap<UserCreateDto, User>();
             CreateMap<RewardDto, Reward>();
             CreateMap<Reward, RewardDto>();
